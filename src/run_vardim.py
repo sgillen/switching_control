@@ -12,7 +12,8 @@ import json
 #env_names = ["HalfCheetah-v2", "Hopper-v2", "Walker2d-v2"]
 #env_names = ["Hopper-v2"]
 
-env_names = ["HalfCheetahBulletEnv-v0", "HopperBulletEnv-v0", "Walker2DBulletEnv-v0"]
+#env_names = ["HalfCheetahBulletEnv-v0", "HopperBulletEnv-v0", "Walker2DBulletEnv-v0"]
+env_names = ["Hopper-v2"]
 post_fns = [identity]#, madodiv, variodiv]
 
 #env_names = ["Humanoid-v2"]
@@ -23,13 +24,13 @@ torch.set_default_dtype(torch.float64)
 num_experiments = len(post_fns)
 num_seeds = 10
 num_epochs = 500
-n_workers = 12
+n_workers = 24
 n_delta = 24
-n_top = 12
-exp_noise = .04
+n_top = 24
+exp_noise = .05
 step_size = .02
 
-save_dir = "./data_iden_pb0/"
+save_dir = "./data_hop_flat0/"
 env_config = {}
 
     

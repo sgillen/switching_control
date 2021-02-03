@@ -69,6 +69,7 @@ def do_rollout(env, policy, render=False, ep_length=1000, return_on_done=False):
     act_list = []
     obs_list = []
     rew_list = []
+    uc_obs_list = []
 
     obs = env.reset()
     done = False
@@ -77,6 +78,7 @@ def do_rollout(env, policy, render=False, ep_length=1000, return_on_done=False):
 
     while cur_step < ep_length:
         obs_list.append(np.copy(obs))
+        uc_obs_list.append(torch.tensor(np.concatenate([env.sim.data.qpos.flat[1:], env.sim.data.qvel.flat])))
         act,_,_,_ = policy.step(obs)
         obs, rew, done, _ = env.step(act)
         if render:
@@ -92,66 +94,12 @@ def do_rollout(env, policy, render=False, ep_length=1000, return_on_done=False):
         cur_step += 1
 
     ep_obs = np.stack(obs_list)
+    ep_uc_obs = np.stack(uc_obs_list)
     ep_act = np.stack(act_list)
     ep_rew = np.array(rew_list)
     ep_rew = ep_rew.reshape(-1, 1)
 
-    return ep_obs, ep_act, ep_rew, None
-
-
-def do_long_rollout(env, policy, ep_length):
-    torch.autograd.set_grad_enabled(False)
-
-    act_list = []
-    obs_list = []
-    rew_list = []
-    uc_obs_list = []
-
-    dtype = torch.float32
-    obs = env.reset()
-    cur_step = 0
-
-    while cur_step < ep_length:
-        obs = torch.as_tensor(obs, dtype=dtype)
-        obs_list.append(obs.clone())
-    
-        uc_obs_list.append(np.concatenate(
-            [env.sim.data.qpos.flat[1:],
-             env.sim.data.qvel.flat]))
-
-        act = policy(obs)
-        obs, rew, done, _ = env.step(act.numpy())
-        
-        # if ep_length > 500 and rew < 0:
-        #     env.render()
-
-        act_list.append(torch.as_tensor(act.clone()))
-        rew_list.append(rew)
-
-        cur_step += 1
-
-    ep_length = len(rew_list)
-    ep_obs = torch.stack(obs_list)
-    uc_ep_obs = np.stack(uc_obs_list)
-    ep_act = torch.stack(act_list)
-    ep_rew = torch.tensor(rew_list, dtype=dtype)
-    ep_rew = ep_rew.reshape(-1, 1)
-
-    # if ep_rew.sum() < 0:
-    #     while True:
-    #         obs = torch.as_tensor(obs, dtype=dtype)
-    #         obs_list.append(obs.clone())
-            
-    #         act = policy(obs)
-    #         obs, rew, done, _ = env.step(act.numpy())
-
-    #         env.step(act)
-    #         env.render()
-    #         time.sleep(.01)
-                
-
-    torch.autograd.set_grad_enabled(True)
-    return ep_obs, ep_act, ep_rew, uc_ep_obs
+    return ep_obs, ep_act, ep_rew, ep_uc_obs
 
 
 # Policy =======================================================================
