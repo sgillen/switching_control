@@ -34,7 +34,6 @@ def mdim_div2(obs_list, act_list, rew_list):
         else:
             m = obs.shape[1] / 2
 
-
     if m is None:
         m,_,_,_ = mesh_dim(combined_obs)
         m = np.clip(m, 1, obs.shape[1] / 2)
@@ -69,37 +68,39 @@ def do_rollout(env, policy, render=False, ep_length=1000, return_on_done=False):
     act_list = []
     obs_list = []
     rew_list = []
-    uc_obs_list = []
+    #uc_obs_list = []
+    ep_done = []
 
     obs = env.reset()
     done = False
     cur_step = 0
     
-
     while cur_step < ep_length:
         obs_list.append(np.copy(obs))
-        uc_obs_list.append(torch.tensor(np.concatenate([env.sim.data.qpos.flat[1:], env.sim.data.qvel.flat])))
+        #uc_obs_list.append(torch.tensor(np.concatenate([env.sim.data.qpos.flat[1:], env.sim.data.qvel.flat])))
         act,_,_,_ = policy.step(obs)
         obs, rew, done, _ = env.step(act)
         if render:
             env.render()
             time.sleep(.01)
-            
-        if done and return_on_done:
-            break
 
         act_list.append(np.copy(act))
         rew_list.append(rew)
-
+        ep_done.append(done)
         cur_step += 1
 
+    
+
+        if done and return_on_done:
+            break
+
     ep_obs = np.stack(obs_list)
-    ep_uc_obs = np.stack(uc_obs_list)
+    #    ep_uc_obs = np.stack(uc_obs_list)
     ep_act = np.stack(act_list)
     ep_rew = np.array(rew_list)
     ep_rew = ep_rew.reshape(-1, 1)
 
-    return ep_obs, ep_act, ep_rew, ep_uc_obs
+    return ep_obs, ep_act, ep_rew, ep_done
 
 
 # Policy =======================================================================
@@ -192,7 +193,6 @@ class BoxMesh(MutableMapping):
         round_key = tuple(round_key)
         return round_key
 
-    
 
 # Dimensionality calculations ==================================================
 def create_box_mesh(data, d, initial_mesh=None):
