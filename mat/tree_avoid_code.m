@@ -1,7 +1,12 @@
 % Katie says: getting rid of "hitting walls are death" will make finding
 % the linear policy easier.
 
-xvals = [-5:.05:5];
+
+a = 3;
+b = 7;
+L = 5; 
+
+xvals = [0:.05:10];
 xmin = min(xvals); xmax = max(xvals);
 Xmid = .5*(xmin+xmax);
 dx = xvals(2)-xvals(1);
@@ -13,10 +18,10 @@ dy = yvals(2)-yvals(1);
 ny = length(yvals);
 
 [X,Y] = meshgrid(xvals,yvals);
-deadzone = [3 7]; % cannot be at or between these values, in x, when y=0
+deadzone = [a b]; % cannot be at or between these values, in x, when y=0
 
 dt = 0.01;
-uset = 0.05*[-5:5];   % list of possible actions
+uset = 0.05*[-L:L];   % list of possible actions
 
 % perform value iteration, for optimal policy, and optimal action
 V = 0*X;

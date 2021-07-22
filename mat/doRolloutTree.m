@@ -1,4 +1,4 @@
-function [R, X] = doRollout(W, xvals)
+function [R, X] = doRolloutTree(W, xvals)
     N = 50;
     x = randsample(xvals,size(W,1),true);
     y = -2*ones(size(x));
