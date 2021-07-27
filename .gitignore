@@ -131,3 +131,4 @@ slurm-*.out
 *~
 
 **/tmp
+*.asv

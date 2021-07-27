@@ -1,12 +1,12 @@
-function [R, X] = doRolloutMu(W, xvals)
+function [R, X] = doRolloutSplit(W1,W2,xvals)
     N = 50;
-    x = randsample(xvals,size(W,1),true)';
+    x = randsample(xvals,size(W1,1),true)';
     y = -2*ones(size(x));
     dy = .05;
     tol = .01;
 
-    R = zeros(size(W,1),1);
-    X = zeros(2, size(W,1), N);
+    R = zeros(size(W1,1),1);
+    X = zeros(2, size(W1,1), N);
     
     
     deadzone = [3 7];
@@ -17,7 +17,11 @@ function [R, X] = doRolloutMu(W, xvals)
     %umin = -umax;
     
     for i=1:N
-        a = sum(W(:,1:2).*([(x-W(:,3)), (y-W(:,4))]),2);
+        xsel = x < 5;
+        
+        a1 = sum(W1(:,1:2).*([(x-W1(:,3)), (y-W1(:,4))]),2);
+        a2 = sum(W2(:,1:2).*([(x-W2(:,3)), (y-W2(:,4))]),2);
+        a = a1.*xsel + a2*~xsel;
         a = max(umin, a);
         a = min(umax, a);
         u = a;
