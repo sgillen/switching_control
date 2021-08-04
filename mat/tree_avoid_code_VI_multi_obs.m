@@ -1,3 +1,6 @@
+% Multi obstacle Value iteration: up to 3 obstacles for now
+% line 73 affected the optimal solution from Value iteration, should be
+% removed
 a = 4;
 b = 6;
 L = 5; 
@@ -11,10 +14,13 @@ nx = length(xvals);
 yvals = -2.5:.05:0.5;
 ymin = min(yvals); ymax = max(yvals);
 dy = yvals(2)-yvals(1);
-g = .05;
+g = .5;
 ny = length(yvals);
 
 [X,Y] = meshgrid(xvals,yvals);
+
+dt = .1;
+uset = 0.5*[-L:L];   % list of possible actions
 % all obstacles 2 units wide, change a and b for changing the obstacles
 deadzone1 = [a b]; % obstacle 1 
 y_dead1 = -.5;
@@ -23,20 +29,19 @@ y_dead2 = 0;
 deadzone3 = [a b]+1.2; % obstacle 3
 y_dead3 = 0;
 
-dt = 1;
-uset = 0.05*[-L:L];   % list of possible actions
+
 
 % perform value iteration, for optimal policy, and optimal action
 V = 0*X;
-%fi = find(X==0); % left side no-go zone
+% fi = find(X==0); % left side no-go zone
 %V(fi) = -1000;
 %fi = find(X==10); % right side no-go zone
 %V(fi) = -1000;
 fi1 = find((X>=deadzone1(1)).*(X<=deadzone1(2)).*(Y==y_dead1)); % obstacle 1
-% fi2 = find((X>=deadzone2(1)).*(X<=deadzone2(2)).*(Y==y_dead2)); % obstacle 2
+fi2 = find((X>=deadzone2(1)).*(X<=deadzone2(2)).*(Y==y_dead2)); % obstacle 2
 % fi3 = find((X>=deadzone3(1)).*(X<=deadzone3(2)).*(Y==y_dead3)); % obstacle 3
 V(fi1) = -1000 + abs(X(fi1)-Xmid);
-% V(fi2) = -1000 + abs(X(fi2)-Xmid);
+V(fi2) = -1000 + abs(X(fi2)-Xmid);
 % V(fi3) = -1000 + abs(X(fi3)-Xmid);
 
 fi_bad = find(V==-1000); % "dead" states...
@@ -66,7 +71,8 @@ for n1=1:100 % perform the iteration
     Q = 0*id_go;
     for n2=1:length(uset)
         Q(:,n2) = V_onestep(id_go(:,n2))- (uset(n2))^2 + df*V(id_go(:,n2)); % u^2 penalty
-        Q(:,n2) = max(-1000,Q(:,n2));
+%         Q(:,n2) = max(-1000,Q(:,n2)); %prevents the value from going
+%         below -1000, has negative effect on policy
     end
     [ai,bi] = sort(Q,2);
     P = bi(:,end); % optimal action (from uset list)
