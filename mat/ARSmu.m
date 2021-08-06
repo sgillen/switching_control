@@ -2,7 +2,7 @@ function [W] = ARSmu(a_sched, sigma_sched, N, n_delta, nTop, xvals)
 
 W = zeros(1,4);
 W(3) = 5;
-W(4) = -.75;
+W(4) = .8;
 
 
 for e = 1:N

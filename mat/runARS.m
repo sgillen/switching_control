@@ -14,7 +14,3 @@ policy = @(W, x)(W*x);
 doRollout = @(p)doRollout2D(p,xvals1,50); 
 
 W1 = ARS(a,sigma,N,nDelta,nTop,W0,policy, doRollout);
-
-
-
-

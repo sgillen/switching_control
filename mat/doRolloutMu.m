@@ -8,7 +8,7 @@ function [R, X] = doRolloutMu(W, xvals)
     R = zeros(size(W,1),1);
     X = zeros(2, size(W,1), N);
     
-    
+   
     deadzone = [3 7];
     umax = 5;
     umin = -umax;

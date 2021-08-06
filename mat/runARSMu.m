@@ -99,3 +99,31 @@ figure()
 surf(X,Y,U0);
 hold on
 surf(X,Y,Uc);
+
+%% 
+
+Nnn = 1000;
+Xnn = zeros(size(Xt,1), Nnn);
+Ynn = zeros(1,Nnn);
+for i = 1:Nnn
+    x = randsample(xvals0,size(W1,1),true)';
+    xval = [x x];
+    [R1,Xt1] = doRolloutMu(W1, xval);
+    [R2,Xt2] = doRolloutMu(W2, xval);
+    
+    Ynn(:,i) = R1 > R2;
+    if R1 > R2
+        Xnn(:,i) = Xt1(:,:,1);
+    else
+        Xnn(:,i) = Xt2(:,:,1);
+    end
+end
+
+net = fitcnet(Xnn', Ynn); 
+Xtest = zeros(100,2)
+Xtest(:,1) = [0:.1:9.9]; 
+Xtest(:,2) = -1.95;
+figure()
+plot(Xtest, net.predict(Xtest));
+
+

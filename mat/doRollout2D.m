@@ -33,4 +33,3 @@ function [R,X] = doRollout2D(policy,xvals,N)
     end
 
 end
-

@@ -1,3 +1,7 @@
+%% Env code
+% arguments: a,b,L ... xmin,dx,xmax ... ymin,dy,ymax, .. g (dy/dt), ... dt
+% pass list of deadzones
+
 % Multi obstacle Value iteration: up to 3 obstacles for now
 % line 73 affected the optimal solution from Value iteration, should be
 % removed
@@ -30,7 +34,7 @@ deadzone3 = [a b]+1.2; % obstacle 3
 y_dead3 = 0;
 
 
-
+%% Value iteration code
 % perform value iteration, for optimal policy, and optimal action
 V = 0*X;
 % fi = find(X==0); % left side no-go zone
