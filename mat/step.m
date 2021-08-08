@@ -13,6 +13,6 @@ x_next = x_current + u*dt;
 y_next = y_current + g*dt;
 
 term = any(x_next>=deadzones(:,1)).*any(x_next<=deadzones(:,2)).*any(-tol<(y_next-deadzones(:,3))&(y_next-deadzones(:,3))<tol); % determines if there is a collision with any of the trees 
-R = -1000*term; % -1000 reward when a callision with tree detected
+R = -1000*term; % -1000 reward when a callision with tree detectedct
 end
 

@@ -1,6 +1,7 @@
 function [R, X] = doRolloutMu(W, xvals)
     N = 50;
     x = randsample(xvals,size(W,1),true)';
+    x
     ymax = 2;
     y = -ymax*ones(size(x));
     g = 5;
