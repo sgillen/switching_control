@@ -5,9 +5,9 @@ close all;
 
 a = [1,.01];
 sigma = [1,.01];
-n_delta = 512;
+n_delta = 256;
 nTop = 256;
-N = 10000;
+N = 50000;
 Neval = 100;
 
 xvals0 =  [0:.05:10];
@@ -120,7 +120,7 @@ for i = 1:Nnn
 end
 
 net = fitcnet(Xnn', Ynn); 
-Xtest = zeros(100,2)
+Xtest = zeros(100,2);
 Xtest(:,1) = [0:.1:9.9]; 
 Xtest(:,2) = -1.95;
 figure()

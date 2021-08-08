@@ -1,8 +1,10 @@
 function [R, X] = doRolloutMu(W, xvals)
     N = 50;
     x = randsample(xvals,size(W,1),true)';
-    y = -2*ones(size(x));
-    dy = .05;
+    ymax = 2;
+    y = -ymax*ones(size(x));
+    g = 5;
+    dt = .01;
     tol = .01;
 
     R = zeros(size(W,1),1);
@@ -22,14 +24,14 @@ function [R, X] = doRolloutMu(W, xvals)
         a = min(umax, a);
         u = a;
         
-        x = x + u;
+        x = x + u*dt;
         x = max(0, x);
         x = min(10, x);
-        y = y + dy;
+        y = y + g*dt;
         
         R = R - (u.^2);
         
-        term =(x>=deadzone(1)).*(x<=deadzone(2)).*(-tol < y < tol);
+        term =(x>=deadzone(1)).*(x<=deadzone(2)).*((-tol < y) & (y < tol));
         R = R -10000*term;
         
         X(:,:,i) = [x,y]';

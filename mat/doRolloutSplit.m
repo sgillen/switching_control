@@ -2,7 +2,8 @@ function [R, X] = doRolloutSplit(W1,W2,xvals)
     N = 50;
     x = randsample(xvals,size(W1,1),true)';
     y = -2*ones(size(x));
-    dy = .05;
+    dt = .01;
+    g = 5;
     tol = .01;
 
     R = zeros(size(W1,1),1);
@@ -26,14 +27,14 @@ function [R, X] = doRolloutSplit(W1,W2,xvals)
         a = min(umax, a);
         u = a;
         
-        x = x + u;
+        x = x + u*dt;
         x = max(0, x);
         x = min(10, x);
-        y = y + dy;
+        y = y + g*dt;
         
         R = R - (u.^2);
         
-        term =(x>=deadzone(1)).*(x<=deadzone(2)).*(-tol < y < tol);
+        term =(x>=deadzone(1)).*(x<=deadzone(2)).*((-tol < y) & (y < tol));
         R = R -10000*term;
         
         X(:,:,i) = [x,y]';
