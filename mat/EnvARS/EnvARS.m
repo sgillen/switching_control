@@ -1,16 +1,11 @@
-env = TreeClass
+function [W, policy] = EnvARS(env, alpha, sigma, nDelta, nTop, N)
+
 W = zeros(env.getObservationInfo.Dimension(1), env.getActionInfo.Dimension(1));   
 
 policy_mean = zeros(size(W,1),1);  % -- 10*1
 policy_std = ones(size(W,1),1);    % -- 10*1
 totalT = 0;
 
-
-nDelta = 32;
-nTop = 32;
-alpha = .02;
-sigma = .05;
-N = 1000;
 var_thresh = 1e-6;
 
 for e = 1:N
@@ -85,16 +80,11 @@ for e = 1:N
     
     
 end
+
+policy = @(x)(W'*((x - policy_mean)./policy_std)); % -- 3*1
 %fprintf('done!');
 %save('RL_50000iter_2maxtT_8alive.mat', 'W', 'policy_mean', 'policy_std', 'totaltime', 'a', 'sigma', 'N', 'n_delta', 'nTop', 'var_thresh', 'n', 'dt', 'maxT')
+end
 
-yvals = [-2:.05:0.5];
-xvals = [0:.05:10];
-[X,Y] = meshgrid(xvals,yvals);
-U = policy(X
-
-policy = @(x)(W'*((x - policy_mean)./policy_std));
-[R,xhist,thist] = DoRolloutWithEnv(policy,env); % n_delta*2 parrallel
-plot(xhist(1,:), xhist(3,:));
 
 

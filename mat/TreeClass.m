@@ -18,7 +18,7 @@ classdef TreeClass < rl.env.MATLABEnvironment
     
     properties
         % Initialize system state [x,dx,theta,dtheta]'
-        X = zeros(4,1);
+        X = zeros(2,1);
         curStep = 0; 
 
         
@@ -35,12 +35,12 @@ classdef TreeClass < rl.env.MATLABEnvironment
         % Change class name and constructor name accordingly
         function this = TreeClass()
             % Initialize Observation settings
-            ObservationInfo = rlNumericSpec([4 1]);
+            ObservationInfo = rlNumericSpec([2 1]);
             ObservationInfo.Name = 'Tree system states';
-            ObservationInfo.Description = 'x, dx, y, dy';
+            ObservationInfo.Description = 'x, y';
             
             % Initialize Action settings   
-            L = 5;
+            L = 10;
             ActionInfo = rlNumericSpec([1], 'LowerLimit', -5, 'UpperLimit', 5);
             ActionInfo.Name = 'Tree system Action';
             
@@ -67,13 +67,11 @@ classdef TreeClass < rl.env.MATLABEnvironment
             x = max(this.xmin, x);
             x = min(this.xmax,x);
             
-            y = this.X(3);
+            y = this.X(2);
             y = y + this.g*this.dt;
             
             this.X(1) = x;
-            this.X(2) = Action;
-            this.X(3) = y;
-            this.X(4) = this.g; 
+            this.X(2) = y;
             Observation = this.X;
             
             Reward = 0;
@@ -91,10 +89,8 @@ classdef TreeClass < rl.env.MATLABEnvironment
         
         % Reset environment to initial state and output initial observation
         function InitialObservation = reset(this)
-            this.X(3) = this.yinit;
             this.X(1) = randsample(this.init_xvals,1);
-            this.X(2) = 0;
-            this.X(4) = this.g;
+            this.X(2) = this.yinit;
             InitialObservation = this.X;
            
             this.curStep = 0; 

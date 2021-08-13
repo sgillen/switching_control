@@ -21,7 +21,7 @@ for e = 1:N
     [sR, sI] = sort(tR,'descend');
     Rdiff = (pR - mR);
     ss = a/(size(deltas,1)*std(R) + 1e-6);
-    ss
+    
     step  = Rdiff(sI(1:nTop))'*deltas(sI(1:nTop),:);
     W = W + ss*step;
     

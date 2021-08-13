@@ -11,7 +11,11 @@ N = 50000;
 Neval = 100;
 
 xvals0 =  [0:.05:10];
+begin = tic;
+
 W0 = ARSmu(a,sigma,N,n_delta,nTop,xvals0);
+
+fprintf("EPS: %f \n",  N*n_delta/toc(begin));
 
 
 Rt = 0;
