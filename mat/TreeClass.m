@@ -3,8 +3,8 @@ classdef TreeClass < rl.env.MATLABEnvironment
     
     %% Properties 
     properties
-       g = -5 % The constant acceleration in y. 
-       yinit = 2; % yvalue to inizialize y at
+       g = -5 % The constant acceleration in y.
+        yinit = 2; % yvalue to inizialize y at
        dt = .01; 
        tol = 0.01; % tolerance for accepting that we are in a deadzone
        N = 50; % how many steps i n an episode
@@ -20,7 +20,6 @@ classdef TreeClass < rl.env.MATLABEnvironment
         % Initialize system state [x,dx,theta,dtheta]'
         X = zeros(2,1);
         curStep = 0; 
-
         
     end
     
