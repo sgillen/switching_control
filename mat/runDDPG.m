@@ -1,6 +1,6 @@
 clear all;
-env = TreeClassCustomizable_test;
-initOpts = rlAgentInitializationOptions('NumHiddenUnit',64);
+env = TreeClassCustomizable_xy;
+initOpts = rlAgentInitializationOptions('NumHiddenUnit',16);
 agent = rlDDPGAgent(env.getObservationInfo,env.getActionInfo,initOpts);
 %%%%%%%%%
 critic = getCritic(agent);
@@ -13,5 +13,8 @@ actor.Options.UseDevice = 'cpu';
 % actor.Options.LearnRate = 1e-3;
 agent  = setActor(agent,actor);
 
-opt = rlTrainingOptions('MaxEpisodes',700,'MaxStepsPerEpisode',60,'ScoreAveragingWindowLength',100);
+opt = rlTrainingOptions('MaxEpisodes',500,'MaxStepsPerEpisode',env.N,'ScoreAveragingWindowLength',100);
 trainstats = train(agent, env, opt);
+
+visualizeAgent(agent,env);
+

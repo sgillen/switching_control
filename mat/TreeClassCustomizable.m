@@ -217,14 +217,14 @@ classdef TreeClassCustomizable < rl.env.MATLABEnvironment
 %         % (optional) Visualization method
        % function plot(this)
             % Initiate the visualization
-            d = this.deadzones;
-            
-            
-            %plot obstacles when the env is created
-            figure(44)
-            plot(d(:,1:2)', [d(:,3) d(:,3)]','r','LineWidth',1)
-            axis([0 10 -10 2])
-%           % Update the visualization
+%             d = this.deadzones;
+%             
+%             
+%             %plot obstacles when the env is created
+%             figure(44)
+%             plot(d(:,1:2)', [d(:,3) d(:,3)]','r','LineWidth',1)
+%             axis([0 10 -10 2])
+% %           % Update the visualization
 %           envUpdatedCallback(this)
         end
         
@@ -276,7 +276,7 @@ classdef TreeClassCustomizable < rl.env.MATLABEnvironment
 %             validateattributes(val,{'numeric'},{'real','finite','scalar'},'','PenaltyForFalling');
 %             this.PenaltyForFalling = val;
 %         end
-    end
+%    end
     
     methods (Access = protected)
         % (optional) update visualization everytime the environment is updated 

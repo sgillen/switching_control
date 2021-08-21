@@ -1,14 +1,14 @@
-env = TreeClass;
+env = TreeClassCustomizable_xy;
 
-nDelta = 256;
-nTop = 256;
+nDelta = 64;
+nTop = 64;
 alpha = .02;
 sigma = .05;
-N = 500;
+N = 5000;
 
 begin = tic;
 [W, policy] = EnvARSMu(env, alpha, sigma, nDelta, nTop, N);
-fprintf("EPS: %f \n",  N*n_delta/toc(begin));
+fprintf("EPS: %f \n",  N*nDelta/toc(begin));
 
 
 yvals = [-2:.05:0.5];
@@ -22,6 +22,9 @@ for i = 1:size(X,1)
     end
 end
 
+figure()
+U(U < -5) = -5;
+U(U > 5) = 5;
 surf(X,Y,U);
 %policy = @(x)(W'*((x - policy_mean)./policy_std));
 [R,xhist,thist] = DoRolloutWithEnv(policy,env); % n_delta*2 parrallel

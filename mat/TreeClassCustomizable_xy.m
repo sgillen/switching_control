@@ -5,9 +5,9 @@ classdef TreeClassCustomizable_xy < rl.env.MATLABEnvironment
     properties
        g = -5 % The constant acceleration in y. 
        yinit = 2; % yvalue to inizialize y at 
-       dt = .01; 
-       tol = 0.01; % tolerance for accepting that we are in a deadzone
-       N = 60; % how many steps i n an episode %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       dt = .1; 
+       tol = 0.1; % tolerance for accepting that we are in a deadzone
+       N = 5; % how many steps i n an episode %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        
        deadzones = [3,7,0]; % where does the tree live?
        
@@ -37,7 +37,7 @@ classdef TreeClassCustomizable_xy < rl.env.MATLABEnvironment
     methods              
         % Contructor method creates an instance of the environment
         % Change class name and constructor name accordingly
-        function this = TreeClassCustomizable_test(type, n, w)
+        function this = TreeClassCustomizable_xy(type, n, w)
            
             % Initialize Observation settings
             ObservationInfo = rlNumericSpec([2 1]);
@@ -82,9 +82,9 @@ classdef TreeClassCustomizable_xy < rl.env.MATLABEnvironment
             
             
             %plot obstacles when the env is created
-            figure()
-            plot(d(:,1:2)', [d(:,3) d(:,3)]','r','LineWidth',1)
-            axis([0 10 -10 2])
+            %figure()
+            %plot(d(:,1:2)', [d(:,3) d(:,3)]','r','LineWidth',1)
+            %axis([0 10 -10 2])
             % Initialize property values and pre-compute necessary values
             % this.ActionInfo.Elements = this.MaxForce*[-1 1];
 
@@ -113,11 +113,11 @@ classdef TreeClassCustomizable_xy < rl.env.MATLABEnvironment
             Observation = this.X;
             
             Reward = 0;
-            Reward = Reward - 0.1*(Action.^2) + 5;
+            %Reward = Reward - 0.01*(Action.^2) + 1;
             %term =(x>=this.deadzone(1)) & (x<=this.deadzone(2)) & (-this.tol < y) & (y < this.tol);
             term = any(x>=this.deadzones(:,1)) && any(x<=this.deadzones(:,2)) && any(-this.tol<(y-this.deadzones(:,3))&(y-this.deadzones(:,3))<this.tol); % determines if there is a collision with any of the trees 
 
-            Reward = Reward -100*term;
+            Reward = Reward -25*term;
            
             IsDone = this.curStep >= this.N || term;
             this.curStep = this.curStep + 1;

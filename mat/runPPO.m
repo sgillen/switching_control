@@ -1,7 +1,9 @@
 clear all;
-env = TreeClassCustomizable;
-initOpts = rlAgentInitializationOptions('NumHiddenUnit',64);
-agent = rlPPOAgent(env.getObservationInfo,env.getActionInfo,initOpts);
+env = TreeClassCustomizable_xy;
+initOpts = rlAgentInitializationOptions('NumHiddenUnit',16);
+agentOpts = rlPPOAgentOptions('UseDeterministicExploitation', true);
+agent = rlPPOAgent(env.getObservationInfo,env.getActionInfo,initOpts,agentOpts);
+
 %%%%%%%%%
 critic = getCritic(agent);
 critic.Options.LearnRate = 5*1e-3;
@@ -13,5 +15,15 @@ actor.Options.UseDevice = 'cpu';
 actor.Options.LearnRate = 1e-3;
 agent  = setActor(agent,actor);
 
-opt = rlTrainingOptions('MaxEpisodes',1000,'MaxStepsPerEpisode',60,'ScoreAveragingWindowLength',100);
+visualizeAgent(agent,env);
+agent.AgentOptions.UseDeterministicExploitation = false;
+visualizeAgent(agent,env);
+
+
+opt = rlTrainingOptions('MaxEpisodes',5000,'MaxStepsPerEpisode',env.N,'ScoreAveragingWindowLength',100);
 trainstats = train(agent, env, opt);
+
+visualizeAgent(agent,env);
+agent.AgentOptions.UseDeterministicExploitation = false;
+visualizeAgent(agent,env);
+
