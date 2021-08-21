@@ -1,5 +1,8 @@
 from seagul.rl.ars.ars_np_queue import ARSAgent, postprocess_default
-from common import *
+#from common import *
+from seagul.mesh import identity
+import seagul.envs
+
 import copy
 import gym
 import time
@@ -17,7 +20,8 @@ from stable_baselines3.common.utils import set_random_seed
 
 import torch as torch
 
-env_names = ["Hopper-v2", "Walker2d-v2", "HalfCheetah-v2" ]
+#env_names = ["Hopper-v2", "Walker2d-v2", "HalfCheetah-v2" ]
+env_names = ['tree_simple-v0']
 #env_names = ["HalfCheetah-v2"]
 #env_names = ["Hopper-v2"]
 #post_fns = [madodiv, variodiv]
@@ -26,13 +30,13 @@ env_names = ["Hopper-v2", "Walker2d-v2", "HalfCheetah-v2" ]
 #env_names = ["MinitaurBulletEnv-v0"]
 post_fns = [identity]# variodiv, madodiv]
 
-torch.set_default_dtype(torch.float64)
+torch.set_default_dtype(torch.float32)
 num_experiments = len(post_fns)
 num_seeds = 4
-num_steps = int(2e6)
+num_steps = int(2e5)
 n_workers = 1
 
-save_dir = "./data_ppo_iden2"
+save_dir = "./data_ppo_tree0"
 #env_config = {}
 
 
